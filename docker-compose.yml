@@ -1,0 +1,45 @@
+version: '2'
+services:
+  php5:
+    image: anapassos/php5
+    container_name: php5
+    volumes:
+      - ./php5/www:/var/www
+      - ./dados:/var/www/html/dados
+      - /tmp:/tmp
+      - ./logs/php_error_log:/var/www/logs/php_error_log
+      #-	./config/php5/php.ini:/etc/php5/apache2/php.ini
+    ports:
+      - "80:80"
+    environment:
+      XDEBUG_CONFIG: remote_host=192.168.5.{Your end}
+    networks:
+      redelocal2:
+        ipv4_address: 192.168.220.{Your end}
+    restart: always  
+  php7:
+    image: anapassos/php7
+    container_name: php7
+    volumes:
+      - ./php7/www:/var/www/html
+      - ./dados:/var/www/html/dados
+      - ./dados:/dados
+      - /tmp:/tmp
+      - ./logs/php_error_log:/var/www/logs/php_error_log
+      #- ./config/php7/php.ini:/etc/php/7.3/apache2/php.ini
+    ports:
+      - "8080:80"
+      - "443:443"
+    environment:
+      XDEBUG_CONFIG: remote_host=192.168.5.{Your end}
+    networks:
+      redelocal2:
+        ipv4_address: 192.168.220.{Your end}
+    restart: always
+networks:
+  redelocal2:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.220.0/24
+          gateway: 192.168.220.1
